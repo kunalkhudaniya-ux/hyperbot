@@ -9,10 +9,14 @@ import requests
 APP_DIR = Path(__file__).parent
 DB_PATH = APP_DIR / "chat_memory.db"
 
-GROQ_MODEL = "llama-3.1-8b-instant"
+# Hugging Face model to use (change to any chat-capable model you like)
+HF_MODEL = "meta-llama/Llama-3.1-8B-Instruct"
+
+# Hugging Face router endpoint (OpenAI-compatible chat completions format)
+HF_API_URL = "https://router.huggingface.co/v1/chat/completions"
 
 st.set_page_config(
-    page_title="Harshit Chat Bot",
+    page_title="Kunal Chat Bot",
     page_icon="🤖",
     layout="centered"
 )
@@ -85,18 +89,18 @@ def clear_messages(session_id):
     conn.close()
 
 
-# ================= GROQ API =================
-def groq_chat(messages):
-    api_key = st.secrets["GROQ_API_KEY"]
+# ================= HUGGING FACE API =================
+def huggingface_chat(messages):
+    api_key = st.secrets["HF_API_KEY"]
 
     response = requests.post(
-        "https://api.groq.com/openai/v1/chat/completions",
+        HF_API_URL,
         headers={
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json"
         },
         json={
-            "model": GROQ_MODEL,
+            "model": HF_MODEL,
             "messages": messages,
             "temperature": 0.7,
             "max_tokens": 900
@@ -143,7 +147,7 @@ def main():
 
     session_id = st.session_state.session_id
 
-    st.title("🤖 Harshit Chat Bot")
+    st.title("🤖 Kunal Chat Bot")
 
     # ================= SIDEBAR =================
     with st.sidebar:
@@ -232,7 +236,7 @@ def main():
     with st.chat_message("assistant"):
         try:
             with st.spinner("Thinking... 🤔"):
-                reply = groq_chat(messages)
+                reply = huggingface_chat(messages)
 
             st.markdown(reply)
             save_message(session_id, "assistant", reply)
