@@ -16,7 +16,7 @@ HF_MODEL = "meta-llama/Llama-3.1-8B-Instruct"
 HF_API_URL = "https://router.huggingface.co/v1/chat/completions"
 
 st.set_page_config(
-    page_title="Kunal Chat Bot",
+    page_title="HyperBot",
     page_icon="🤖",
     layout="centered"
 )
@@ -147,7 +147,7 @@ def main():
 
     session_id = st.session_state.session_id
 
-    st.title("🤖 Kunal Chat Bot")
+    st.title("🤖 HyperBot")
 
     # ================= SIDEBAR =================
     with st.sidebar:
